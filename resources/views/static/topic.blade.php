@@ -7,11 +7,11 @@
     @include("includes.aside")
     <div class="col-span-5">
         <h2>Threads</h2>
-        @foreach ($threads->all() as $th)
+        @foreach ($threads as $th)
             <li>
                 <a href="{{ route('thread',
-                 [$topic->name, $th->id]) }}">
-                    {{ $th->text }}
+                 [$topic->getName(), $th->getID()]) }}">
+                    {{ $th->getText() }}
                 </a>
             </li>
         @endforeach

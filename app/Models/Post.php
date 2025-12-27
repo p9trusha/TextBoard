@@ -6,35 +6,24 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    protected $fillable = ['text', 'parent', 'parent_type', 'reply_to'];
+
     function getID() {
         return $this->id;
     }
 
-    function setText($text)
+    public function getText() {
+        return $this->text;
+    }
+
+    public function getCreatedDate() {
+        return $this->created_at;
+    }
+
+    function setAttributes($text, $parentID, $repliedMessageID = null)
     {
         $this->text = $text;
-    }
-
-    function setParent($parentID)
-    {
         $this->parent = $parentID;
-    }
-
-    function setParentType($parentType)
-    {
-        $this->parent_type = $parentType;
-    }
-
-    function setReplyTo($messageID)
-    {
-        $this->reply_to = $messageID;
-    }
-
-    function setAttributes($text, $parentID, $parentType, $replyTo = null)
-    {
-        $this->setText($text);
-        $this->setParent($parentID);
-        $this->setParentType($parentType);
-        $this->setReplyTo($replyTo);
+        $this->reply_to = $repliedMessageID;
     }
 }

@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model
 {
+    protected $fillable = ["name"];
+
+    function getThreads() {
+        return Post::where("parent_type", "topic")->
+        where("parent", $this->getID())->whereNull("reply_to")->get()->all();
+    }
+
     function getID() {
         return $this->id;
     }

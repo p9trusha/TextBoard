@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('parent_type');
             $table->unsignedBigInteger('reply_to')->nullable();
 
+            $table->foreign('reply_to')->references('id')->on('posts')->onDelete('set null');
+
             $table->index(['parent', 'parent_TYPE']);
             $table->index('reply_to');
         });

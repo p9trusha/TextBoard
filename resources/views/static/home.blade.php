@@ -2,7 +2,7 @@
 
 @section("content")
     <h1>Topics</h1>
-    @foreach ($topics->all() as $topic)
+    @foreach ($topics as $topic)
         <li>
             <a href="{{ route('topic', $topic->name) }}">
                 {{ $topic->name }}
@@ -15,7 +15,7 @@
                 <div class="flex flex-col">
                     <label for="text">Name</label>
                     <input type="text" placeholder="Enter name of topic:"
-                    name="name" id="name" value=" {{ old('name') }}">
+                    name="name" id="name">
                     </input>
                 </div>
                 <button type="submit">Add</button>

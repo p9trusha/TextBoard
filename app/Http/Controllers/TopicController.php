@@ -19,10 +19,8 @@ class TopicController extends Controller
     public function topic($topic_name)
     {
         $topics = Topic::all();
-
-        $topic = $topics->where("name", $topic_name)->first();
-        $threads = Post::where("parent_type", "topic")->
-        where("parent", $topic->getID())->whereNull("reply_to")->get();
+        $topic = Topic::where("name", $topic_name)->first();
+        $threads = $topic->getThreads();
 
         return view("static.topic",
         compact("topics", "topic", "threads"));

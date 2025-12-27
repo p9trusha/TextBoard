@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Message;
 use App\Models\Post;
+use App\Models\Thread;
 use App\Models\Topic;
 use Illuminate\Http\Request;
 
@@ -12,9 +14,8 @@ class PostController extends Controller
     public function thread($topic_name, $thread_id)
     {
         $topics = Topic::all();
-        $thread = Post::find($thread_id);
-        $messages = Post::where("parent_type", "post")->
-        where("parent", $thread_id)->get();
+        $thread = Thread::find($thread_id);
+        $messages = $thread->getMessages();
 
         return view(
             "static.thread",
@@ -26,14 +27,13 @@ class PostController extends Controller
     {
         $topics = Topic::all();
 
-        $threads = Post::whereNull("reply_to")->get();
+        $threads = Thread::whereNull("reply_to")->get()->all();
 
         $topic = Topic::where('name', $topic_name)->first();
 
-        $thread = new Post();
+        $thread = new Thread();
         $thread->setAttributes($request->input("text"), $topic->getID(), "topic");
         $thread->save();
-
 
         return redirect()->route('topic', $topic_name)->with(
             compact("topics", "topic", "threads")
@@ -43,13 +43,12 @@ class PostController extends Controller
     public function add_messege(PostRequest $request, $topic_name, $thread_id)
     {
         $topics = Topic::all();
-        $topic_name = Topic::where("name", $topic_name)->first()->getName();
-        $messages = Post::where("parent_type", "post")->
-        where("parent", $thread_id)->get();
+        $messages = Message::where("parent_type", "post")->
+        where("parent", $thread_id)->get()->all();
 
 
-        $message = new Post();
-        $message->setAttributes($request->input("text"), Post::find($thread_id)->id, "post");
+        $message = new Message();
+        $message->setAttributes($request->input("text"), Post::find($thread_id)->id);
         $message->save();
 
         return redirect()->route('thread', [$topic_name, $thread_id])
@@ -71,14 +70,12 @@ class PostController extends Controller
         )
     {
         $topics = Topic::all();
-        $topic_name = Topic::where("name", $topic_name)->first()->getName();
-        $messages = Post::where("parent_type", "post")->
-        where("parent", $thread_id)->get();
+        $messages = Message::where("parent_type", "post")->
+        where("parent", $thread_id)->get()->all();
 
-        $message = new Post();
+        $message = new Message();
         $message->setAttributes(
-            $request->input("text"), Post::find($thread_id)->getID(),
-            "post", $message_id
+            $request->input("text"), Post::find($thread_id)->getID(), $message_id
         );
         $message->save();
 
