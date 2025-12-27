@@ -31,9 +31,7 @@ class PostController extends Controller
         $topic = Topic::where('name', $topic_name)->first();
 
         $thread = new Post();
-        $thread->text = $request->input('text');
-        $thread->parent = $topic->id;
-        $thread->parent_type = "topic";
+        $thread->setAttributes($request->input("text"), $topic->getID(), "topic");
         $thread->save();
 
 
@@ -45,15 +43,13 @@ class PostController extends Controller
     public function add_messege(PostRequest $request, $topic_name, $thread_id)
     {
         $topics = Topic::all();
-        $topic_name = Topic::where("name", $topic_name)->first()->name;
+        $topic_name = Topic::where("name", $topic_name)->first()->getName();
         $messages = Post::where("parent_type", "post")->
         where("parent", $thread_id)->get();
 
 
         $message = new Post();
-        $message->text = $request->input('text');
-        $message->parent = Post::find($thread_id)->id;
-        $message->parent_type = "post";
+        $message->setAttributes($request->input("text"), Post::find($thread_id)->id, "post");
         $message->save();
 
         return redirect()->route('thread', [$topic_name, $thread_id])
@@ -75,15 +71,15 @@ class PostController extends Controller
         )
     {
         $topics = Topic::all();
-        $topic_name = Topic::where("name", $topic_name)->first()->name;
+        $topic_name = Topic::where("name", $topic_name)->first()->getName();
         $messages = Post::where("parent_type", "post")->
         where("parent", $thread_id)->get();
 
         $message = new Post();
-        $message->text = $request->input('text');
-        $message->parent = Post::find($thread_id)->id;
-        $message->parent_type = "post";
-        $message->reply_to = $message_id;
+        $message->setAttributes(
+            $request->input("text"), Post::find($thread_id)->getID(),
+            "post", $message_id
+        );
         $message->save();
 
         return redirect()->route('thread', [$topic_name, $thread_id])->

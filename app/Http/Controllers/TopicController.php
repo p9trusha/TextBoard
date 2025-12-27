@@ -22,7 +22,7 @@ class TopicController extends Controller
 
         $topic = $topics->where("name", $topic_name)->first();
         $threads = Post::where("parent_type", "topic")->
-        where("parent", $topic->id)->whereNull("reply_to")->get();
+        where("parent", $topic->getID())->whereNull("reply_to")->get();
 
         return view("static.topic",
         compact("topics", "topic", "threads"));
@@ -33,7 +33,7 @@ class TopicController extends Controller
         $topics = Topic::all();
 
         $topic = new Topic();
-        $topic->name = $request->input('name');
+        $topic->setName($request->input('name'));
         $topic->save();
 
         return redirect()->route('home')->with("topics", $topics);
