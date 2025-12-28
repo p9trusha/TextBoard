@@ -15,14 +15,9 @@ return new class extends Migration
             $table->id();
             $table->text('text');
             $table->timestamps();
-            $table->unsignedBigInteger('parent');
+            $table->unsignedBigInteger('parent_id');
             $table->string('parent_type');
             $table->unsignedBigInteger('reply_to')->nullable();
-
-            $table->foreign('reply_to')->references('id')->on('posts')->onDelete('set null');
-
-            $table->index(['parent', 'parent_TYPE']);
-            $table->index('reply_to');
         });
     }
 

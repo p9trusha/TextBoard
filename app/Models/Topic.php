@@ -8,9 +8,8 @@ class Topic extends Model
 {
     protected $fillable = ["name"];
 
-    function getThreads() {
-        return Post::where("parent_type", "topic")->
-        where("parent", $this->getID())->whereNull("reply_to")->get()->all();
+    public function threads() {
+        return $this->morphMany(Thread::class, 'parent'); // Связь один-ко-многим
     }
 
     function getID() {

@@ -15,7 +15,7 @@ class PostController extends Controller
     {
         $topics = Topic::all();
         $thread = Thread::find($thread_id);
-        $messages = $thread->getMessages();
+        $messages = $thread->messages;
 
         return view(
             "static.thread",
@@ -32,8 +32,8 @@ class PostController extends Controller
         $topic = Topic::where('name', $topic_name)->first();
 
         $thread = new Thread();
-        $thread->setAttributes($request->input("text"), $topic->getID(), "topic");
-        $thread->save();
+        $thread->setAttributes($request->input("text"), $topic->getID());
+        $topic->threads()->save($thread);
 
         return redirect()->route('topic', $topic_name)->with(
             compact("topics", "topic", "threads")
@@ -43,13 +43,13 @@ class PostController extends Controller
     public function add_messege(PostRequest $request, $topic_name, $thread_id)
     {
         $topics = Topic::all();
-        $messages = Message::where("parent_type", "post")->
-        where("parent", $thread_id)->get()->all();
+        $thread = Thread::find($thread_id);
+        $messages = $thread->messages;
 
 
         $message = new Message();
         $message->setAttributes($request->input("text"), Post::find($thread_id)->id);
-        $message->save();
+        $thread->messages()->save($message);
 
         return redirect()->route('thread', [$topic_name, $thread_id])
         ->with(
@@ -70,18 +70,30 @@ class PostController extends Controller
         )
     {
         $topics = Topic::all();
-        $messages = Message::where("parent_type", "post")->
-        where("parent", $thread_id)->get()->all();
+        $thread = Thread::find($thread_id);
+        $messages = $thread->messages;
+        $reepliedMessage = Message::find($message_id);
 
         $message = new Message();
         $message->setAttributes(
-            $request->input("text"), Post::find($thread_id)->getID(), $message_id
+            $request->input("text"), $reepliedMessage->getID(), $message_id
         );
-        $message->save();
+        $thread->messages()->save($message);
 
         return redirect()->route('thread', [$topic_name, $thread_id])->
         with(
             compact("topics", "topic_name", "messages")
+        );
+    }
+
+    public function replies($topic_name, $thread_id, $message_id) {
+        $topics = Topic::all();
+        $thread = Thread::find($thread_id);
+        $message = Message::find($message_id);
+        $replies = $message->replies;
+        return view(
+            "static.replies",
+            compact("topics", "topic_name", "thread", "message", "replies")
         );
     }
 }

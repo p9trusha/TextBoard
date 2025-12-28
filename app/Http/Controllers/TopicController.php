@@ -20,7 +20,7 @@ class TopicController extends Controller
     {
         $topics = Topic::all();
         $topic = Topic::where("name", $topic_name)->first();
-        $threads = $topic->getThreads();
+        $threads = $topic->threads;
 
         return view("static.topic",
         compact("topics", "topic", "threads"));

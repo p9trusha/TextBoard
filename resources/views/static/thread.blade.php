@@ -11,6 +11,10 @@
             <h2>Posts</h2>
             @foreach ($messages as $m)
             <li>
+                <h3>{{ $m->getID() }}</h3>
+                @if ($m->getRepliedMessageID())
+                    <p>>>{{ $m->getRepliedMessageID() }}</p>
+                @endif
                 <a href="{{
                     route(
                     'reply_message.form',
@@ -19,12 +23,11 @@
                     }}">
                     Reply
                 </a>
-                <h3>{{ $m->getID() }}</h3>
-                @if ($m->getRepliedMessageID())
-                    <p>>>{{ $m->getRepliedMessageID() }}</p>
-                @endif
                 <p>{{ $m->getText() }}</p>
-                <p>{{ $thread->getCreatedDate() }}</p>
+                <p>{{ $m->getCreatedDate() }}</p>
+                <a href="{{ route('replies', [$topic_name, $thread->getID(), $m->getID()]) }}">
+                    Replies
+                </a>
             </li>
             @endforeach
             <h2>Add message</h2>

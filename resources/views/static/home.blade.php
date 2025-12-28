@@ -4,8 +4,8 @@
     <h1>Topics</h1>
     @foreach ($topics as $topic)
         <li>
-            <a href="{{ route('topic', $topic->name) }}">
-                {{ $topic->name }}
+            <a href="{{ route('topic', $topic->getName()) }}">
+                {{ $topic->getName() }}
             </a>
         </li>
     @endforeach

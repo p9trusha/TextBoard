@@ -7,7 +7,7 @@
     @include("includes.aside")
     <div class="col-span-5">
         <h2>Threads</h2>
-        @foreach ($threads as $th)
+        @foreach ($topic->threads as $th)
             <li>
                 <a href="{{ route('thread',
                  [$topic->getName(), $th->getID()]) }}">
@@ -16,7 +16,7 @@
             </li>
         @endforeach
         <h1>Add thread</h1>
-        <form action="{{ route('add_thread', $topic->name) }}"
+        <form action="{{ route('add_thread', $topic->getName()) }}"
             method="POST" class="flex flex-col">
             @include("includes.postForm")
         </form>
