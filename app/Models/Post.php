@@ -32,7 +32,9 @@ class Post extends Model
     }
 
     function getID() {
-        return $this->id;
+        if ($this) {
+            return $this->id;
+        }
     }
 
     public function getText() {
