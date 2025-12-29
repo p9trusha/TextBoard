@@ -8,8 +8,12 @@
         <div class="col-span-5">
             <h1>{{ $thread->getText() }}</h1>
             <p>{{ $thread->getCreatedDate() }}</p>
-            <h2>Posts</h2>
-            @include("includes.messages")
+            <h2>Messages</h2>
+            @foreach ($messages as $m)
+            <li>
+                @include("includes.message")
+            </li>
+            @endforeach
             <h2>Add message</h2>
             <form action="{{
             route('add_message',
