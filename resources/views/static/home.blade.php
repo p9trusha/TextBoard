@@ -4,13 +4,13 @@
     <h1>Topics</h1>
     @foreach ($topics as $topic)
         <li>
-            <a href="{{ route('topic', $topic->getName()) }}">
+            <a href="{{ route('topic', $topic) }}">
                 {{ $topic->getName() }}
             </a>
         </li>
     @endforeach
     <h1>Add topic</h1>
-    <form action="{{ route('add_topic') }}" method="POST" class="flex flex-col">
+    <form action="{{ route('addTopic') }}" method="POST" class="flex flex-col">
                 @csrf
                 <div class="flex flex-col">
                     <label for="text">Name</label>

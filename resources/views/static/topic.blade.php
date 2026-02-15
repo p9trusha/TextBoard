@@ -10,13 +10,13 @@
         @foreach ($topic->threads as $th)
             <li>
                 <a href="{{ route('thread',
-                 [$topic->getName(), $th->getID()]) }}">
+                 [$topic, $th]) }}">
                     {{ $th->getText() }}
                 </a>
             </li>
         @endforeach
         <h1>Add thread</h1>
-        <form action="{{ route('add_thread', $topic->getName()) }}"
+        <form action="{{ route('addThread', $topic) }}"
             method="POST" class="flex flex-col">
             @include("includes.postForm")
         </form>

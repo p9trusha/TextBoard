@@ -4,14 +4,14 @@
 @endif
 <a href="{{
     route(
-    'reply_message.form',
-    [$topic_name, $thread->getID(), $m->getID()]
+    'replyMessage.form',
+    [$topic, $thread, $m]
     )
     }}">
     Reply
 </a>
 <p>{{ $m->getText() }}</p>
 <p>{{ $m->getCreatedDate() }}</p>
-<a href="{{ route('replies', [$topic_name, $thread->getID(), $m->getID()]) }}">
+<a href="{{ route('replies', [$topic, $thread, $m]) }}">
     Replies
 </a>

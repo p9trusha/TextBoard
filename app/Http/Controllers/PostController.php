@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Message;
-use App\Models\Post;
 use App\Models\Thread;
 use App\Models\Topic;
 use Illuminate\Contracts\View\View;
@@ -12,90 +11,84 @@ use Illuminate\Http\RedirectResponse;
 
 class PostController extends Controller
 {
-    public function thread($topic_name, $thread_id): View
+    public function thread(Topic $topic, Thread $thread): View
     {
         $topics = Topic::all();
-        $thread = Thread::find($thread_id);
         $messages = $thread->messages;
 
         return view(
             "static.thread",
-            compact("topics", "topic_name", "thread", "messages")
+            compact("topics", "topic", "thread", "messages")
         );
     }
 
-    public function add_thread(PostRequest $request, $topic_name): RedirectResponse
+    public function addThread(PostRequest $request, Topic $topic): RedirectResponse
     {
         $topics = Topic::all();
 
         $threads = Thread::whereNull("reply_to")->get()->all();
 
-        $topic = Topic::where('name', $topic_name)->first();
-
         $thread = new Thread();
         $thread->setAttributes($request->input("text"), $topic->getID());
         $topic->threads()->save($thread);
 
-        return redirect()->route('topic', $topic_name)->with(
+        return redirect()->route('topic', $topic)->with(
             compact("topics", "topic", "threads")
         );
     }
 
-    public function add_messege(PostRequest $request, $topic_name, $thread_id): RedirectResponse
+    public function addMessege(PostRequest $request, Topic $topic, Thread $thread): RedirectResponse
     {
         $topics = Topic::all();
-        $thread = Thread::find($thread_id);
         $messages = $thread->messages;
 
 
         $message = new Message();
-        $message->setAttributes($request->input("text"), Post::find($thread_id)->id);
+        $message->setAttributes($request->input("text"), $thread->id);
         $thread->messages()->save($message);
 
-        return redirect()->route('thread', [$topic_name, $thread_id])
+        return redirect()->route('thread', [$topic, $thread])
         ->with(
-            compact("topics", "topic_name", "messages")
+            compact("topics", "topic", "messages")
         );
     }
 
-    public function showReplyForm($topic_name, $thread_id, $message_id): View
+    public function showReplyForm(Topic $topic, Thread $thread, Message $message): View
     {
         return view(
-            "static.reply_message_form",
-            compact("topic_name", "thread_id", "message_id")
+            "static.replyMessageForm",
+            compact("topic", "thread", "message")
         );
     }
 
     public function replyMessage(
-        PostRequest $request, $topic_name, $thread_id, $message_id
+        PostRequest $request, Topic $topic, Thread $thread, Message $message
         ): RedirectResponse
     {
         $topics = Topic::all();
-        $thread = Thread::find($thread_id);
+
         $messages = $thread->messages;
-        $reepliedMessage = Message::find($message_id);
+        $reepliedMessage = $message;
 
         $message = new Message();
         $message->setAttributes(
-            $request->input("text"), $reepliedMessage->getID(), $message_id
+            $request->input("text"), $reepliedMessage->getID(), $reepliedMessage->getID()
         );
         $thread->messages()->save($message);
 
-        return redirect()->route('thread', [$topic_name, $thread_id])->
+        return redirect()->route('thread', [$topic, $thread])->
         with(
-            compact("topics", "topic_name", "messages")
+            compact("topics", "topic", "messages")
         );
     }
 
-    public function replies($topic_name, $thread_id, $message_id): View
+    public function replies(Topic $topic, Thread $thread, Message $message): View
     {
         $topics = Topic::all();
-        $thread = Thread::find($thread_id);
-        $message = Message::find($message_id);
         $replies = $message->replies;
         return view(
             "static.replies",
-            compact("topics", "topic_name", "thread", "message", "replies")
+            compact("topics", "topic", "thread", "message", "replies")
         );
     }
 }

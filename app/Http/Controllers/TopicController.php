@@ -15,17 +15,16 @@ class TopicController extends Controller
         return view("static.home")->with("topics", $topics);
     }
 
-    public function topic($topic_name): View
+    public function topic(Topic $topic): View
     {
         $topics = Topic::all();
-        $topic = Topic::where("name", $topic_name)->first();
         $threads = $topic->threads;
 
         return view("static.topic",
         compact("topics", "topic", "threads"));
     }
 
-    public function add_topic(TopicRequest $request): RedirectResponse
+    public function addTopic(TopicRequest $request): RedirectResponse
     {
         $topics = Topic::all();
 

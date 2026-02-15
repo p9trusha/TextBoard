@@ -4,41 +4,41 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('//', [TopicController::class, 'index'])->name("home");
+Route::get('/', [TopicController::class, 'index'])->name("home");
 
 Route::get(
-    '/{topic_name}/', [TopicController::class, 'topic']
+    '/topic/{topic}', [TopicController::class, 'topic']
     )->name("topic");
 
 Route::post(
-    '/add_topic/', [TopicController::class, 'add_topic']
-    )->name("add_topic");
+    '/addTopic', [TopicController::class, 'addTopic']
+    )->name("addTopic");
 
 
 Route::get(
-    '/{topic_name}/{thread_id}/',[PostController::class, 'thread']
-    )->name("thread");
+    '/topic/{topic}/thread/{thread}',[PostController::class, 'thread']
+    )->name("thread")->scopeBindings();
 
 Route::post(
-    '/{topic_name}/add_thread/', [PostController::class, 'add_thread']
-    )->name("add_thread");
+    '/topic/{topic}/addThread', [PostController::class, 'addThread']
+    )->name("addThread");
 
 Route::post(
-    '/{topic_name}/{thread_id}/add_message/',
-    [PostController::class, 'add_messege']
-    )->name("add_message");
+    '/topic/{topic}/thread/{thread}/addMessage',
+    [PostController::class, 'addMessege']
+    )->name("addMessage")->scopeBindings();
 
 Route::get(
-    '/{topic_name}/{thread_id}/{message_id}/reply_message',
+    '/topic/{topic}/thread/{thread}/message/{message}/replyMessage',
     [PostController::class, 'showReplyForm']
-    )->name("reply_message.form");
+    )->name("replyMessage.form")->scopeBindings();
 
  Route::post(
-    '/{topic_name}/{thread_id}/{message_id}/reply_message',
+    '/topic/{topic}/thread/{thread}/message/{message}/replyMessage',
     [PostController::class, 'replyMessage']
-    )->name('reply_message.submit');
+    )->name('replyMessage.submit')->scopeBindings();
 
 Route::get(
-    '/{topic_name}/{thread_id}/{message_id}/replies/',
+    '/topic/{topic}/thread/{thread}/message/{message}/replies/',
     [PostController::class, 'replies']
-    )->name("replies");
+    )->name("replies")->scopeBindings();

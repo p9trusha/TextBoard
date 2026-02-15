@@ -16,8 +16,8 @@
             @endforeach
             <h2>Add message</h2>
             <form action="{{
-            route('add_message',
-            [$topic_name, $thread->getID()])
+            route('addMessage',
+            [$topic, $thread])
             }}" method="POST" class="flex flex-col">
                 @include("includes.postForm")
             </form>
