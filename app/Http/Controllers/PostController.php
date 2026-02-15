@@ -7,11 +7,12 @@ use App\Models\Message;
 use App\Models\Post;
 use App\Models\Thread;
 use App\Models\Topic;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class PostController extends Controller
 {
-    public function thread($topic_name, $thread_id)
+    public function thread($topic_name, $thread_id): View
     {
         $topics = Topic::all();
         $thread = Thread::find($thread_id);
@@ -23,7 +24,7 @@ class PostController extends Controller
         );
     }
 
-    public function add_thread(PostRequest $request, $topic_name)
+    public function add_thread(PostRequest $request, $topic_name): RedirectResponse
     {
         $topics = Topic::all();
 
@@ -40,7 +41,7 @@ class PostController extends Controller
         );
     }
 
-    public function add_messege(PostRequest $request, $topic_name, $thread_id)
+    public function add_messege(PostRequest $request, $topic_name, $thread_id): RedirectResponse
     {
         $topics = Topic::all();
         $thread = Thread::find($thread_id);
@@ -57,7 +58,7 @@ class PostController extends Controller
         );
     }
 
-    public function showReplyForm($topic_name, $thread_id, $message_id)
+    public function showReplyForm($topic_name, $thread_id, $message_id): View
     {
         return view(
             "static.reply_message_form",
@@ -67,7 +68,7 @@ class PostController extends Controller
 
     public function replyMessage(
         PostRequest $request, $topic_name, $thread_id, $message_id
-        )
+        ): RedirectResponse
     {
         $topics = Topic::all();
         $thread = Thread::find($thread_id);
@@ -86,7 +87,8 @@ class PostController extends Controller
         );
     }
 
-    public function replies($topic_name, $thread_id, $message_id) {
+    public function replies($topic_name, $thread_id, $message_id): View
+    {
         $topics = Topic::all();
         $thread = Thread::find($thread_id);
         $message = Message::find($message_id);
