@@ -3,4 +3,7 @@
     @foreach ($topics as $t)
         <li><a href="{{ route('topic', $t) }}">{{ $t->getName() }}</a></li>
     @endforeach
+    <div class="pagination">
+        {{ $topics->links() }}
+    </div>
 </div>

@@ -18,7 +18,6 @@
             </ul>
         </div>
     @endif
-
     @yield("content")
 </body>
 </html>

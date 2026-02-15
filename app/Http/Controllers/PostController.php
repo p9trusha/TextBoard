@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function thread(Topic $topic, Thread $thread): View
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
         $messages = $thread->messages;
 
         return view(
@@ -24,7 +24,7 @@ class PostController extends Controller
 
     public function addThread(PostRequest $request, Topic $topic): RedirectResponse
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
 
         $threads = Thread::whereNull("reply_to")->get()->all();
 
@@ -39,7 +39,7 @@ class PostController extends Controller
 
     public function addMessege(PostRequest $request, Topic $topic, Thread $thread): RedirectResponse
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
         $messages = $thread->messages;
 
 
@@ -65,7 +65,7 @@ class PostController extends Controller
         PostRequest $request, Topic $topic, Thread $thread, Message $message
         ): RedirectResponse
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
 
         $messages = $thread->messages;
         $reepliedMessage = $message;
@@ -84,7 +84,7 @@ class PostController extends Controller
 
     public function replies(Topic $topic, Thread $thread, Message $message): View
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
         $replies = $message->replies;
         return view(
             "static.replies",

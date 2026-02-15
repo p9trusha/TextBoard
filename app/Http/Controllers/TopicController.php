@@ -17,7 +17,7 @@ class TopicController extends Controller
 
     public function topic(Topic $topic): View
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
         $threads = $topic->threads;
 
         return view("static.topic",
@@ -26,7 +26,7 @@ class TopicController extends Controller
 
     public function addTopic(TopicRequest $request): RedirectResponse
     {
-        $topics = Topic::all();
+        $topics = Topic::paginate(Topic::paginationCount);
 
         $topic = new Topic();
         $topic->setName($request->input('name'));
