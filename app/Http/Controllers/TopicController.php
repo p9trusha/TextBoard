@@ -26,11 +26,11 @@ class TopicController extends Controller
 
     public function addTopic(TopicRequest $request): RedirectResponse
     {
-        $topics = Topic::paginate(Topic::paginationCount);
+        Topic::create([
+            "name" => $request->input('name')
+        ]);
 
-        $topic = new Topic();
-        $topic->setName($request->input('name'));
-        $topic->save();
+        $topics = Topic::paginate(Topic::paginationCount);
 
         return redirect()->route('home')->with("topics", $topics);
     }

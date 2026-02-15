@@ -1,6 +1,6 @@
-<h3>{{ $m->getID() }}</h3>
-@if ($m->getRepliedMessageID())
-    <p>>>{{ $m->getRepliedMessageID() }}</p>
+<h3>{{ $m->id }}</h3>
+@if ($m->reply_to)
+    <p>>>{{ $m->reply_to }}</p>
 @endif
 <a href="{{
     route(
@@ -10,8 +10,8 @@
     }}">
     Reply
 </a>
-<p>{{ $m->getText() }}</p>
-<p>{{ $m->getCreatedDate() }}</p>
+<p>{{ $m->text }}</p>
+<p>{{ $m->created_at }}</p>
 <a href="{{ route('replies', [$topic, $thread, $m]) }}">
     Replies
 </a>

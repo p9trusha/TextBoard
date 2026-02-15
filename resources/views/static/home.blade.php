@@ -5,7 +5,7 @@
     @foreach ($topics as $topic)
         <li>
             <a href="{{ route('topic', $topic) }}">
-                {{ $topic->getName() }}
+                {{ $topic->name }}
             </a>
         </li>
     @endforeach

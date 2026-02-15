@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Post extends Model
 {
-    protected $fillable = ['text', 'parent', 'parent_type', 'reply_to'];
+    protected $fillable = ['text', 'parent_id', 'parent_type', 'reply_to'];
 
     public function parent(): MorphTo {
         return $this->morphTo(); // Связывает с различными моделями-родителями
@@ -29,26 +29,5 @@ class Post extends Model
     public function repliedTo(): BelongsTo
     {
         return $this->belongsTo(Message::class, 'reply_to');
-    }
-
-    function getID() {
-        if ($this) {
-            return $this->id;
-        }
-    }
-
-    public function getText() {
-        return $this->text;
-    }
-
-    public function getCreatedDate() {
-        return $this->created_at;
-    }
-
-    function setAttributes($text, $parentID, $repliedMessageID = null)
-    {
-        $this->text = $text;
-        $this->parent_id = $parentID;
-        $this->reply_to = $repliedMessageID;
     }
 }

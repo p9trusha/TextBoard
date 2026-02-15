@@ -13,16 +13,4 @@ class Topic extends Model
     public function threads() {
         return $this->morphMany(Thread::class, 'parent'); // Связь один-ко-многим
     }
-
-    function getID() {
-        return $this->id;
-    }
-
-    function getName() {
-        return $this->name;
-    }
-
-    function setName(string $name) {
-        $this->name = $name;
-    }
 }

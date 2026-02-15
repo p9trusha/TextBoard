@@ -15,7 +15,6 @@ class PostController extends Controller
     {
         $topics = Topic::paginate(Topic::paginationCount);
         $messages = $thread->messages;
-
         return view(
             "static.thread",
             compact("topics", "topic", "thread", "messages")
@@ -24,13 +23,15 @@ class PostController extends Controller
 
     public function addThread(PostRequest $request, Topic $topic): RedirectResponse
     {
-        $topics = Topic::paginate(Topic::paginationCount);
-
-        $threads = Thread::whereNull("reply_to")->get()->all();
-
-        $thread = new Thread();
-        $thread->setAttributes($request->input("text"), $topic->getID());
+        $thread = Thread::create([
+            "text" => $request->input("text"),
+            "parent_id" => $topic->id,
+            "parent_type" => "topic"
+        ]);
         $topic->threads()->save($thread);
+
+        $topics = Topic::paginate(Topic::paginationCount);
+        $threads = Thread::whereNull("reply_to")->get()->all();
 
         return redirect()->route('topic', $topic)->with(
             compact("topics", "topic", "threads")
@@ -39,13 +40,15 @@ class PostController extends Controller
 
     public function addMessege(PostRequest $request, Topic $topic, Thread $thread): RedirectResponse
     {
+        $message = Message::create([
+            "text" => $request->input("text"),
+            "parent_id" => $thread->id,
+            "parent_type" => "post"
+        ]);
+        $thread->messages()->save($message);
+
         $topics = Topic::paginate(Topic::paginationCount);
         $messages = $thread->messages;
-
-
-        $message = new Message();
-        $message->setAttributes($request->input("text"), $thread->id);
-        $thread->messages()->save($message);
 
         return redirect()->route('thread', [$topic, $thread])
         ->with(
@@ -62,19 +65,18 @@ class PostController extends Controller
     }
 
     public function replyMessage(
-        PostRequest $request, Topic $topic, Thread $thread, Message $message
+        PostRequest $request, Topic $topic, Thread $thread, Message $reepliedMessage
         ): RedirectResponse
     {
-        $topics = Topic::paginate(Topic::paginationCount);
-
-        $messages = $thread->messages;
-        $reepliedMessage = $message;
-
-        $message = new Message();
-        $message->setAttributes(
-            $request->input("text"), $reepliedMessage->getID(), $reepliedMessage->getID()
-        );
+        $message = Message::create([
+            "text" => $request->input("text"),
+            "parent_id" => $thread->id,
+            "parent_type" => "post"
+        ]);
         $thread->messages()->save($message);
+
+        $topics = Topic::paginate(Topic::paginationCount);
+        $messages = $thread->messages;
 
         return redirect()->route('thread', [$topic, $thread])->
         with(

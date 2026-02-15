@@ -6,8 +6,8 @@
     <div class="grid grid-cols-6 gap-4">
         @include("includes.aside")
         <div class="col-span-5">
-            <h1>{{ $thread->getText() }}</h1>
-            <p>{{ $thread->getCreatedDate() }}</p>
+            <h1>{{ $thread->text }}</h1>
+            <p>{{ $thread->created_at }}</p>
             <h2>Messages</h2>
             @foreach ($messages as $m)
             <li>

@@ -11,7 +11,7 @@
             <li>
                 <a href="{{ route('thread',
                  [$topic, $th]) }}">
-                    {{ $th->getText() }}
+                    {{ $th->text }}
                 </a>
             </li>
         @endforeach
