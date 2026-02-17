@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Post extends Model
 {
-    protected $fillable = ['text', 'parent_id', 'parent_type', 'reply_to'];
+    protected $fillable = ["text", 'reply_to', 'parent_type', 'parent_id'];
 
     public function parent(): MorphTo {
         return $this->morphTo(); // Связывает с различными моделями-родителями

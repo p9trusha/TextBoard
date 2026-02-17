@@ -11,9 +11,8 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->text('text');
+            $table->morphs('parent');
             $table->timestamps();
-            $table->unsignedBigInteger('parent_id');
-            $table->string('parent_type');
             $table->unsignedBigInteger('reply_to')->nullable();
         });
     }

@@ -23,12 +23,9 @@ class PostController extends Controller
 
     public function addThread(PostRequest $request, Topic $topic): RedirectResponse
     {
-        $thread = Thread::create([
+        $thread = $topic->threads()->create([
             "text" => $request->input("text"),
-            "parent_id" => $topic->id,
-            "parent_type" => "topic"
         ]);
-        $topic->threads()->save($thread);
 
         $topics = Topic::paginate(Topic::paginationCount);
         $threads = Thread::whereNull("reply_to")->get()->all();
@@ -40,12 +37,9 @@ class PostController extends Controller
 
     public function addMessege(PostRequest $request, Topic $topic, Thread $thread): RedirectResponse
     {
-        $message = Message::create([
+        $message = $thread->messages()->create([
             "text" => $request->input("text"),
-            "parent_id" => $thread->id,
-            "parent_type" => "post"
         ]);
-        $thread->messages()->save($message);
 
         $topics = Topic::paginate(Topic::paginationCount);
         $messages = $thread->messages;
@@ -65,15 +59,13 @@ class PostController extends Controller
     }
 
     public function replyMessage(
-        PostRequest $request, Topic $topic, Thread $thread, Message $reepliedMessage
+        PostRequest $request, Topic $topic, Thread $thread, Message $message
         ): RedirectResponse
     {
-        $message = Message::create([
+       $message = $thread->messages()->create([
             "text" => $request->input("text"),
-            "parent_id" => $thread->id,
-            "parent_type" => "post"
+            "reply_to" => $message->id
         ]);
-        $thread->messages()->save($message);
 
         $topics = Topic::paginate(Topic::paginationCount);
         $messages = $thread->messages;

@@ -1,5 +1,4 @@
 @extends("layouts.main")
-
 @section("content")
     <form action="{{
     route('replyMessage.submit', [$topic, $thread, $message])
